@@ -83,7 +83,7 @@ module "cluster" {
   net_config_moid              = module.network.network_policy_moid
   sys_config_moid              = module.network.sys_config_policy_moid
   #trusted_registry_policy_moid = module.trusted_registry.trusted_registry_moid
-  runtime_policy_moid          = module.runtime_policy.runtime_policy_moid
+  runtime_policy_moid          = module.iks_runtime.runtime_policy_moid
   org_name                     = var.organization
   tags                         = var.tags
 }
