@@ -1,5 +1,5 @@
 module "infra_config_policy" {
-  source           = "terraform-cisco-modules/iks/intersight//modules/infra_config_policy"
+  source           = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/infra_config_policy"
   name             = "${var.cluster_name}-infra-config"
   device_name      = var.vc_target_name
   vc_portgroup     = var.vc_portgroup
@@ -12,7 +12,7 @@ module "infra_config_policy" {
 }
 
 module "ip_pool_policy" {
-  source           = "terraform-cisco-modules/iks/intersight//modules/ip_pool"
+  source           = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/ip_pool"
   name             = "${var.cluster_name}-ip-pool"
   starting_address = var.ip_starting_address
   pool_size        = var.ip_pool_size
@@ -25,7 +25,7 @@ module "ip_pool_policy" {
 }
 
 module "network" {
-  source      = "terraform-cisco-modules/iks/intersight//modules/k8s_network"
+  source      = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/k8s_network"
   policy_name = "${var.cluster_name}-network"
   dns_servers = [var.ip_primary_dns, var.ip_secondary_dns]
   ntp_servers = [var.ip_primary_ntp, var.ip_secondary_ntp]
@@ -37,7 +37,7 @@ module "network" {
 
 
 module "k8s_version" {
-  source           = "terraform-cisco-modules/iks/intersight//modules/version"
+  source           = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/version"
   k8s_version      = "1.19.5"
   k8s_version_name = "${var.cluster_name}-1.19.5"
   org_name         = var.organization
@@ -45,7 +45,7 @@ module "k8s_version" {
 }
 
 module "worker_small" {
-  source    = "terraform-cisco-modules/iks/intersight//modules/worker_profile"
+  source    = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/worker_profile"
   name      = join("-", [var.cluster_name, "small"])
   cpu       = 4
   memory    = 16384
@@ -54,7 +54,7 @@ module "worker_small" {
   tags      = var.tags
 }
 module "worker_medium" {
-  source    = "terraform-cisco-modules/iks/intersight//modules/worker_profile"
+  source    = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/worker_profile"
   name      = join("-", [var.cluster_name, "medium"])
   cpu       = 8
   memory    = 24576
@@ -63,7 +63,7 @@ module "worker_medium" {
   tags      = var.tags
 }
 module "worker_large" {
-  source    = "terraform-cisco-modules/iks/intersight//modules/worker_profile"
+  source    = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/worker_profile"
   name      = join("-", [var.cluster_name, "large"])
   cpu       = 12
   memory    = 32768
@@ -72,7 +72,7 @@ module "worker_large" {
   tags      = var.tags
 }
 module "cluster" {
-  source                       = "terraform-cisco-modules/iks/intersight//modules/cluster"
+  source                       = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/cluster"
   name                         = var.cluster_name
   action                       = var.cluster_action
   wait_for_completion          = var.wait_for_completion
@@ -89,7 +89,7 @@ module "cluster" {
 }
 
 module "control_profile" {
-  source       = "terraform-cisco-modules/iks/intersight//modules/node_profile"
+  source       = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/node_profile"
   name         = "${var.cluster_name}-control"
   profile_type = "ControlPlane"
   desired_size = var.master_count
@@ -101,7 +101,7 @@ module "control_profile" {
 }
 
 module "worker_profile" {
-  source       = "terraform-cisco-modules/iks/intersight//modules/node_profile"
+  source       = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/node_profile"
   name         = "${var.cluster_name}-worker_profile"
   profile_type = "Worker"
   desired_size = var.worker_count
@@ -112,7 +112,7 @@ module "worker_profile" {
 
 }
 module "control_provider" {
-  source = "terraform-cisco-modules/iks/intersight//modules/infra_provider"
+  source = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/infra_provider"
   name   = "${var.cluster_name}-control"
   instance_type_moid = trimspace(<<-EOT
   %{if var.worker_size == "small"~}${module.worker_small.worker_profile_moid}%{endif~}
@@ -125,7 +125,7 @@ module "control_provider" {
   tags                     = var.tags
 }
 module "worker_provider" {
-  source = "terraform-cisco-modules/iks/intersight//modules/infra_provider"
+  source = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/infra_provider"
   name   = "${var.cluster_name}-worker"
   instance_type_moid = trimspace(<<-EOT
   %{if var.worker_size == "small"~}${module.worker_small.worker_profile_moid}%{endif~}
@@ -139,7 +139,7 @@ module "worker_provider" {
 }
 
 module "iks_runtime" {
-  source = "terraform-cisco-modules/iks/intersight//modules/runtime_policy"
+  source = "app.terraform.io/Cisco-IST-TigerTeam/iks-amslab/intersight//modules/runtime_policy"
 
   name                 = "${var.cluster_name}-runtime"
   proxy_http_hostname  = var.http_proxy
