@@ -146,3 +146,20 @@ variable "organization" {
   description = "Organization Name"
   default     = "default"
 }
+
+variable "http_proxy" {
+  type        = string
+  description = "http proxy address"
+}
+variable "https_proxy" {
+  type        = string
+  description = "https proxy address"
+}
+variable "http_proxy_port" {
+  type        = string
+  description = "http proxy port"
+}
+variable "https_proxy_port" {
+  type        = string
+  description = "https proxy port"
+}

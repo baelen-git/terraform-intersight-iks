@@ -35,13 +35,6 @@ module "network" {
   tags        = var.tags
 }
 
-module "trusted_registry" {
-  source              = "terraform-cisco-modules/iks/intersight//modules/trusted_registry"
-  policy_name         = "${var.cluster_name}-trusted-registry"
-  unsigned_registries = var.unsigned_registries
-  org_name            = var.organization
-  tags                = var.tags
-}
 
 module "k8s_version" {
   source           = "terraform-cisco-modules/iks/intersight//modules/version"
@@ -89,7 +82,8 @@ module "cluster" {
   ssh_user                     = var.ssh_user
   net_config_moid              = module.network.network_policy_moid
   sys_config_moid              = module.network.sys_config_policy_moid
-  trusted_registry_policy_moid = module.trusted_registry.trusted_registry_moid
+  #trusted_registry_policy_moid = module.trusted_registry.trusted_registry_moid
+  runtime_policy_moid          = module.runtime_policy.runtime_policy_moid
   org_name                     = var.organization
   tags                         = var.tags
 }
@@ -142,4 +136,17 @@ module "worker_provider" {
   node_group_moid          = module.worker_profile.node_group_profile_moid
   infra_config_policy_moid = module.infra_config_policy.infra_config_moid
   tags                     = var.tags
+}
+
+module "iks_runtime" {
+  source = "terraform-cisco-modules/iks/intersight//modules/runtime_policy"
+
+  name                 = "${var.cluster_name}-runtime"
+  proxy_http_hostname  = var.http_proxy
+  proxy_https_hostname = var.https_proxy
+  proxy_http_port      = var.http_proxy_port
+  proxy_https_port     = var.https_proxy_port
+
+  org_name             = var.organization
+  tags                 = var.tags
 }
